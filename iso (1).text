@@ -1,0 +1,10 @@
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y qemu-kvm libvirt-daemon
+curl https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz | tar -xz
+./ngrok authtoken 2dIlOugBMyMWKWmWsvbDaHfDjdV_2WGL2wZucLgKWGNATG6og
+./ngrok tcp 5901
+qemu-img create -f qcow2 win.img 26.8G
+wget -O win.iso "https://computernewb.com/isos/windows/Win8.1_English_x64.iso"
+sudo qemu-system-x86_64 -m 8G -cpu host -smp 4 -hda win.img -cdrom win.iso -device usb-ehci,id=usb,bus=pci.0,addr=0x4 -device usb-tablet -smp cores=4 -device e1000,netdev=n0 -netdev user,id=n0 -accel kvm -display vnc=:1 -vga vmware &
+
+
